@@ -37,11 +37,17 @@ TBitField::~TBitField()
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
 {
+	if (n < 0 || n > BitLen) {
+		throw - 1;
+	}
 	return  BitLen / 32;
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
+	if (n < 0 || n > BitLen) {
+		throw - 1;
+	}
 	int shift = n % 32;
 	return 1 << shift;
 }
@@ -55,32 +61,73 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
+	if (n < 0 || n > BitLen) {
+		throw - 1;
+	}
+	TELEM mask = GetMemMask(n);
+	int index = GetMemIndex(n);
+	pMem[index] = pMem[index] | mask;
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
+	if (n < 0 || n > BitLen) {
+		throw - 1;
+	}
+	TELEM mask = ~GetMemMask(n);
+	int index = GetMemIndex(n);
+	pMem[index] = pMem[index] & mask;
 }
 
-int TBitField::GetBit(const int n) const // получить значение бита
+TELEM TBitField::GetBit(const int n) const // получить значение бита
 {
-  return 0;
+	if (n < 0 || n > BitLen) {
+		throw - 1;
+	}
+	TELEM mask = GetMemMask(n);
+	int index = GetMemIndex(n);
+	TELEM res = pMem[index] & mask;
+	return res;
 }
 
 // битовые операции
 
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
+	if (*this != bf) {
+		delete[]pMem;
+		pMem = new TELEM[bf.MemLen];
+		MemLen = bf.MemLen;
+	}
+	BitLen = bf.BitLen;
+	for (int i = 0; i < MemLen; i++) {
+		pMem[i] = bf.pMem[i];
+	}
 	return *this;
 }
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
 {
-  return 0;
+	if (BitLen != bf.BitLen) { return false; }
+	for (int i = 0; i < MemLen - 1; i++) {
+		if (pMem[i] != bf.pMem[i]) { return false; }
+	}
+	for (int i = (MemLen - 1) * 32; i < BitLen; i++) {
+		if (GetBit(i) != bf.GetBit(i)) { return false; }
+	}
+  return true;
 }
 
 int TBitField::operator!=(const TBitField &bf) const // сравнение
 {
-  return 0;
+	if (BitLen != bf.BitLen) { return 1; }
+	for (int i = 0; i < MemLen - 1; i++) {
+		if (pMem[i] != bf.pMem[i]) { return 1; }
+	}
+	for (int i = (MemLen - 1) * 32; i < BitLen; i++) {
+		if (GetBit(i) != bf.GetBit(i)) { return 1; }
+	}
+	return 0;
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
