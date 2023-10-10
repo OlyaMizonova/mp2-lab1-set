@@ -186,7 +186,7 @@ TEST(TBitField, or_operator_applied_to_bitfields_of_non_equal_size)
   expBf.SetBit(2);
   expBf.SetBit(3);
 
-  EXPECT_EQ(expBf, bf1 | bf2);
+  EXPECT_EQ(expBf,bf1 | bf2);
 }
 
 TEST(TBitField, and_operator_applied_to_bitfields_of_equal_size)
@@ -267,7 +267,7 @@ TEST(TBitField, invert_plus_and_operator_on_different_size_bitfield)
   // testBf = 00001000
   testBf.SetBit(3);
 
-  EXPECT_EQ(secondBf & negFirstBf, testBf);
+  EXPECT_EQ((secondBf & negFirstBf), testBf);
 }
 
 TEST(TBitField, can_invert_many_random_bits_bitfield)

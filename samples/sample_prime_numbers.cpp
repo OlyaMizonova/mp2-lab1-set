@@ -16,14 +16,15 @@
 
 int main()
 {
-    //mew
-  /*int n, m, k, count;
+
+  int n, m, k, count;
 
   setlocale(LC_ALL, "Russian");
   cout << "Тестирование программ поддержки битового поля" << endl;
   cout << "             Решето Эратосфена" << endl;
   cout << "Введите верхнюю границу целых значений - ";
   cin  >> n;
+
   TBitField s(n + 1);
   // заполнение множества
   for (m = 2; m <= n; m++)
@@ -90,7 +91,7 @@ int main()
     }
   cout << endl;
   cout << "В первых " << n << " числах " << count << " простых" << endl;
-  */
+  
 }
 
 #endif
